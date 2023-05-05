@@ -10,7 +10,7 @@ uploaded_file = st.file_uploader("Upload a CSV file", type="csv")
 if uploaded_file is not None:
     data = pd.read_csv(uploaded_file)
     st.success("Data uploaded successfully!")
-    st.dataframe(data[['subreddit', 'username', 'url', 'content', 'upvotes', 'date']])
+    st.dataframe(data[['content', 'date']])
     # Hide search options if file is uploaded
     st.experimental_set_query_params(file_uploaded="true")
 else:
@@ -29,7 +29,7 @@ else:
             # Load the saved data
             data = pd.read_csv('reddit_data.csv')
             # Display the data in a table
-            st.dataframe(data[['subreddit', 'username', 'url', 'title', 'content', 'upvotes', 'date']])
+            st.dataframe(data[['content', 'date']])
     else:
         # Display the data
-        st.dataframe(data[['subreddit', 'username', 'url', 'title', 'content', 'upvotes', 'date']])
+        st.dataframe(data[['content', 'date']])
