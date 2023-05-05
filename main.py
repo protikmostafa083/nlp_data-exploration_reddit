@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import base64
 from DataCollection.praw_reddit_data_collector import RedditScraper
 
 st.set_page_config("Reddit Data Exploration", "🤖")
@@ -30,6 +31,14 @@ else:
             data = pd.read_csv('reddit_data.csv')
             # Display the data in a table
             st.dataframe(data[['content', 'date']])
+
+            # add the download functionality
+            if len(data) > 0:
+                st.write("To download uncleaned the data, click the button below:")
+                csv = data.to_csv(index=False)
+                b64 = base64.b64encode(csv.encode()).decode()
+                href = f'<a href="data:file/csv;base64,{b64}" download="reddit_data_uncleaned.csv"><button>Download Data</button></a>'
+                st.markdown(href, unsafe_allow_html=True)
     else:
         # Display the data
         st.dataframe(data[['content', 'date']])
