@@ -11,7 +11,7 @@ uploaded_file = st.file_uploader("Upload a CSV file", type="csv")
 if uploaded_file is not None:
     data = pd.read_csv(uploaded_file)
     st.success("Data uploaded successfully!")
-    st.dataframe(data[['content', 'date']])
+    st.dataframe(data[['content', 'date']], width=650)
     # Hide search options if file is uploaded
     st.experimental_set_query_params(file_uploaded="true")
 else:
@@ -41,4 +41,4 @@ else:
                 st.markdown(href, unsafe_allow_html=True)
     else:
         # Display the data
-        st.dataframe(data[['content', 'date']])
+        st.dataframe(data[['content', 'date']], width=650)
