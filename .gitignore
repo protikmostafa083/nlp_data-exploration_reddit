@@ -1,2 +1,4 @@
 path.txt
 .idea
+*.csv
+DataCollection/__pycache__/

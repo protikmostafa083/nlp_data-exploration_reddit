@@ -2,6 +2,7 @@ import praw
 import csv
 import threading
 from queue import Queue
+from datetime import datetime
 
 
 class RedditScraper:
@@ -25,13 +26,15 @@ class RedditScraper:
             if post is None:
                 break
             content = post.selftext.replace('\n', ' ')  # Replace newlines with spaces
+            post_date = datetime.fromtimestamp(post.created_utc).strftime('%d-%m-%Y')  # Convert UTC timestamp to conventional format
             result_dict = {
                 'subreddit': post.subreddit.display_name,
                 'username': post.author.name,
                 'url': post.url,
+                'title': post.title,
                 'upvotes': post.score,
                 'content': content,
-                'date': post.created_utc
+                'date': post_date
             }
             if post.id not in self.processed_ids:
                 self.processed_ids.add(post.id)
@@ -50,7 +53,7 @@ class RedditScraper:
 
     def save_data(self, csv_file):
         with open(csv_file, mode='w', newline='', encoding='utf-8') as f:
-            fieldnames = ['subreddit', 'username', 'url', 'content', 'upvotes', 'date']
+            fieldnames = ['subreddit', 'username', 'url', 'title', 'content', 'upvotes', 'date']
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
 
@@ -58,6 +61,7 @@ class RedditScraper:
                 writer.writerow(result_dict)
                 print(f'{len(self.processed_ids)} posts found so far...')
 
+    #print("Search Complete")
     def run(self, search_query, csv_file):
         threads = []
         for i in range(self.num_threads):
