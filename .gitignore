@@ -2,3 +2,4 @@ path.txt
 .idea
 *.csv
 DataCollection/__pycache__/
+required_packages.egg-info/
