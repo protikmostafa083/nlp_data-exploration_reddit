@@ -5,6 +5,8 @@ import os
 from DataCollection.praw_reddit_data_collector import RedditScraper
 from EDA.dataClean import cleandata
 from EDA.cleanpreviousfiles import cleanpreviousfiles
+from modelling.wordcloud import generate_wordcloud
+
 
 
 st.set_page_config("Reddit Data Exploration", "🤖")
@@ -65,5 +67,16 @@ if data is not None:
         b64clean = base64.b64encode(csvclean.encode()).decode()
         href = f'<a href="data:file/csv;base64,{b64clean}" download="reddit_data_cleaned.csv"><button>Download Cleaned Data</button></a>'
         st.markdown(href, unsafe_allow_html=True)
+
+    # Generate and display the wordcloud
+    st.subheader("Wordcloud Options")
+    max_words = st.slider("Max Words", 50, 300, 100)  # Allow user to choose max_words parameter
+    st.subheader("Wordcloud")
+    text = ' '.join(cleandf['cleaned'].astype(str).tolist())
+    generate_wordcloud(text,
+                       max_words)  # Pass max_words to the generate_wordcloud function to use in the WordCloud object
+    st.set_option('deprecation.showPyplotGlobalUse', False)
+    st.pyplot()  # Display the wordcloud in the same page as the data
+
 else:
     st.write("Nothing to show now. Search or upload file first")
