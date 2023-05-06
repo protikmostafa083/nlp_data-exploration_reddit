@@ -31,7 +31,7 @@ class RedditScraper:
                 'subreddit': post.subreddit.display_name,
                 'username': post.author.name,
                 'url': post.url,
-                'title': post.title,
+                #'title': post.title,
                 'upvotes': post.score,
                 'content': content,
                 'date': post_date
@@ -53,7 +53,7 @@ class RedditScraper:
 
     def save_data(self, csv_file):
         with open(csv_file, mode='w', newline='', encoding='utf-8') as f:
-            fieldnames = ['subreddit', 'username', 'url', 'title', 'content', 'upvotes', 'date']
+            fieldnames = ['subreddit', 'username', 'url', 'content', 'upvotes', 'date']
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
 

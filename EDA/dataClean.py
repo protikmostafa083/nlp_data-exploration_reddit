@@ -10,6 +10,15 @@ def cleandata(data):
     # Read the CSV file into a Pandas dataframe
     df = data
 
+    if df is None:
+        return None
+
+    # removing None values
+    df = df.dropna(subset=['content'])
+
+    # removing duplicate values
+    df.drop_duplicates(subset=['content'], inplace=True)
+
     # Converting into lower case
     df['content'] = df['content'].str.lower()
 
