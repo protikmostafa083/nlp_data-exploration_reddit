@@ -3,3 +3,4 @@ path.txt
 *.csv
 DataCollection/__pycache__/
 required_packages.egg-info/
+EDA/__pycache__/

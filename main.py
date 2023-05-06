@@ -1,11 +1,18 @@
 import streamlit as st
 import pandas as pd
 import base64
+import os
 from DataCollection.praw_reddit_data_collector import RedditScraper
+from EDA.dataClean import cleandata
+from EDA.cleanpreviousfiles import cleanpreviousfiles
+
 
 st.set_page_config("Reddit Data Exploration", "🤖")
-
 st.title('Reddit Search')
+
+# clean the previous files from the file system
+cleanpreviousfiles()
+
 # Option to upload previous data
 uploaded_file = st.file_uploader("Upload a CSV file", type="csv")
 if uploaded_file is not None:
@@ -37,8 +44,26 @@ else:
                 st.write("To download uncleaned the data, click the button below:")
                 csv = data.to_csv(index=False)
                 b64 = base64.b64encode(csv.encode()).decode()
-                href = f'<a href="data:file/csv;base64,{b64}" download="reddit_data_uncleaned.csv"><button>Download Data</button></a>'
+                href = f'<a href="data:file/csv;base64,{b64}" download="reddit_data_uncleaned.csv"><button>Download Raw Data</button></a>'
                 st.markdown(href, unsafe_allow_html=True)
     else:
         # Display the data
         st.dataframe(data[['content', 'date']], width=650)
+
+if data is not None:
+    # call the cleaning function
+    cleandf = cleandata(data)
+
+    # Display the cleaned data in a table
+    st.write("Cleaned Data:")
+    st.dataframe(cleandf[['cleaned', 'date']], width=650)
+
+    # add the download functionality
+    if len(cleandf) > 0:
+        st.write("To download the cleaned data, click the button below:")
+        csvclean = cleandf.to_csv(index=False)
+        b64clean = base64.b64encode(csvclean.encode()).decode()
+        href = f'<a href="data:file/csv;base64,{b64clean}" download="reddit_data_cleaned.csv"><button>Download Cleaned Data</button></a>'
+        st.markdown(href, unsafe_allow_html=True)
+else:
+    st.write("Nothing to show now. Search or upload file first")
