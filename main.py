@@ -7,6 +7,7 @@ from EDA.dataClean import cleandata
 from EDA.cleanpreviousfiles import cleanpreviousfiles
 from modelling.wordcloud import generate_wordcloud
 from modelling.maxminwords import get_max_min_words
+from EDA.customstopword import remove_custom_stopwords
 
 
 st.set_page_config("Reddit Data Exploration", "🤖")
@@ -67,12 +68,18 @@ if data is not None:
         href = f'<a href="data:file/csv;base64,{b64clean}" download="reddit_data_cleaned.csv"><button>Download Cleaned Data</button></a>'
         st.markdown(href, unsafe_allow_html=True)
 
+    # Remove custom stop words
+    custom_stop_words = st.text_input("Enter comma-separated words to remove from the text:")
+    if custom_stop_words:
+        stop_words_list = [word.strip() for word in custom_stop_words.split(",")]
+        remove_custom_stopwords(cleandf, stop_words_list)
+        st.success(f"Removed custom stop words: {stop_words_list}")
     # Generate and display the wordcloud
-        # Generate and display the wordcloud
-        st.subheader("Wordcloud")
-        text = ' '.join(cleandf['cleaned'].astype(str).tolist())
-        max_words = st.slider("Max Words", 50, 300, 100)
-        generate_wordcloud(text, max_words)
+    # Generate and display the wordcloud
+    st.subheader("Wordcloud")
+    text = ' '.join(cleandf['cleaned'].astype(str).tolist())
+    max_words = st.slider("Max Words", 50, 300, 100)
+    generate_wordcloud(text, max_words)
 
     # Show top and bottom 10 words
     st.subheader("Top and least 10 words")
