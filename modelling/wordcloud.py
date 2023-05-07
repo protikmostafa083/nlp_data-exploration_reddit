@@ -4,7 +4,7 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import streamlit as st
 
-def generate_wordcloud(text):
+def generate_wordcloud(text, max_words):
     """
     Function to generate a wordcloud from text data.
     :param text: str, the text data to generate the wordcloud from.
@@ -21,7 +21,7 @@ def generate_wordcloud(text):
         height=400,                    # Height of the wordcloud image
         background_color='black',      # Background color of the wordcloud image
         colormap='tab20c',             # Colormap used to color the wordcloud image
-        max_words=100                  # Maximum number of words to include in the wordcloud
+        max_words=max_words                  # Maximum number of words to include in the wordcloud
     )
 
     # Generate wordcloud from the text

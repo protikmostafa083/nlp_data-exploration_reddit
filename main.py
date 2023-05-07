@@ -33,7 +33,7 @@ else:
         time_filter = st.selectbox('Choose a time filter:', time_filters, index=0)
         sort_methods = ['relevance', 'hot', 'top', 'new', 'comments']
         sort_method = st.selectbox('Choose a sort method:', sort_methods, index=0)
-        if st.button('Search'):
+        if search_query != '' and time_filter != '' and sort_method != '':
             scraper = RedditScraper(time_filter=time_filter, sort_method=sort_method)
             scraper.run(search_query, 'reddit_data.csv')
             # Load the saved data
@@ -68,12 +68,11 @@ if data is not None:
         st.markdown(href, unsafe_allow_html=True)
 
     # Generate and display the wordcloud
-    st.subheader("Wordcloud")
-
-    text = ' '.join(cleandf['cleaned'].astype(str).tolist())
-
-    # Display the wordcloud
-    generate_wordcloud(text)  # Set max_words to a fixed value of 100
+        # Generate and display the wordcloud
+        st.subheader("Wordcloud")
+        text = ' '.join(cleandf['cleaned'].astype(str).tolist())
+        max_words = st.slider("Max Words", 50, 300, 100)
+        generate_wordcloud(text, max_words)
 
     # Show top and bottom 10 words
     st.subheader("Top and least 10 words")
