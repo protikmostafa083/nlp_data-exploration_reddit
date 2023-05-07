@@ -26,7 +26,7 @@ if uploaded_file is not None:
 else:
     data = None
     # Show search options if file is not uploaded
-    if st.experimental_get_query_params().get("file_uploaded") != "true":
+    if st.experimental_get_query_params().get("file_uploaded") != "true":                                               # Protik changed this
         st.warning("Please upload a CSV file or run a new search.")
         search_query = st.text_input('Enter your search query:')
         time_filters = ['all', 'day', 'hour', 'month', 'week', 'year']
