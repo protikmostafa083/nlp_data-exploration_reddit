@@ -66,4 +66,4 @@ def cleandata(data):
     cleaned_filename = 'cleaned.csv'
     df.to_csv(cleaned_filename, index=True)
 
-    return pd.read_csv(cleaned_filename)
+    return df

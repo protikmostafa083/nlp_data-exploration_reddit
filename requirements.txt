@@ -3,3 +3,4 @@ praw
 nltk
 matplotlib
 wordcloud
+plotly

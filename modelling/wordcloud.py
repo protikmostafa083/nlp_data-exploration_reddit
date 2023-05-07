@@ -2,9 +2,9 @@ import matplotlib
 
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
-#matplotlib.use('TkAgg')
+import streamlit as st
 
-def generate_wordcloud(text, max_words):
+def generate_wordcloud(text):
     """
     Function to generate a wordcloud from text data.
     :param text: str, the text data to generate the wordcloud from.
@@ -15,22 +15,20 @@ def generate_wordcloud(text, max_words):
         text = [str(t) for t in text]
         text = ' '.join(text)
 
-
     # Create a wordcloud object
     wc = WordCloud(
         width=800,                     # Width of the wordcloud image
         height=400,                    # Height of the wordcloud image
         background_color='black',      # Background color of the wordcloud image
-        colormap='tab20c',              # Colormap used to color the wordcloud image
-        max_words=max_words                  # Maximum number of words to include in the wordcloud
+        colormap='tab20c',             # Colormap used to color the wordcloud image
+        max_words=100                  # Maximum number of words to include in the wordcloud
     )
 
     # Generate wordcloud from the text
     wc.generate(text)
 
     # Display the wordcloud
-    plt.figure(figsize=(10, 8))       # Set the figure size of the plot
-    plt.imshow(wc, interpolation='bilinear')  # Plot the wordcloud image
-    plt.axis('off')                  # Turn off the axes of the plot
-    plt.tight_layout(pad=0)          # Set the padding of the plot
-    plt.show()                       # Display the plot
+    fig, ax = plt.subplots(figsize=(10, 8))
+    ax.imshow(wc, interpolation='bilinear')
+    ax.axis('off')
+    st.pyplot(fig)

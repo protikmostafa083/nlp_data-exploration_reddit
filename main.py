@@ -6,7 +6,7 @@ from DataCollection.praw_reddit_data_collector import RedditScraper
 from EDA.dataClean import cleandata
 from EDA.cleanpreviousfiles import cleanpreviousfiles
 from modelling.wordcloud import generate_wordcloud
-
+from modelling.maxminwords import get_max_min_words
 
 
 st.set_page_config("Reddit Data Exploration", "🤖")
@@ -48,12 +48,11 @@ else:
                 b64 = base64.b64encode(csv.encode()).decode()
                 href = f'<a href="data:file/csv;base64,{b64}" download="reddit_data_uncleaned.csv"><button>Download Raw Data</button></a>'
                 st.markdown(href, unsafe_allow_html=True)
-    else:
-        # Display the data
-        st.dataframe(data[['content', 'date']], width=650)
 
 if data is not None:
     # call the cleaning function
+    #filename = cleandata(data)
+    #cleandf = pd.read_csv(filename)
     cleandf = cleandata(data)
 
     # Display the cleaned data in a table
@@ -69,14 +68,16 @@ if data is not None:
         st.markdown(href, unsafe_allow_html=True)
 
     # Generate and display the wordcloud
-    st.subheader("Wordcloud Options")
-    max_words = st.slider("Max Words", 50, 300, 100)  # Allow user to choose max_words parameter
     st.subheader("Wordcloud")
-    text = ' '.join(cleandf['cleaned'].astype(str).tolist())
-    generate_wordcloud(text,
-                       max_words)  # Pass max_words to the generate_wordcloud function to use in the WordCloud object
-    st.set_option('deprecation.showPyplotGlobalUse', False)
-    st.pyplot()  # Display the wordcloud in the same page as the data
 
+    text = ' '.join(cleandf['cleaned'].astype(str).tolist())
+
+    # Display the wordcloud
+    generate_wordcloud(text)  # Set max_words to a fixed value of 100
+
+    # Show top and bottom 10 words
+    st.subheader("Top and bottom 10 words")
+    fig = get_max_min_words(cleandf, 'cleaned')
+    st.plotly_chart(fig)
 else:
     st.write("Nothing to show now. Search or upload file first")
