@@ -1,1 +1,1 @@
-# CWHS_Team2_BIHSP
+# Team 2's Data Collection and Analytics using Reddit
