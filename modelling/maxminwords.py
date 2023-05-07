@@ -18,19 +18,19 @@ def get_max_min_words(df, col):
     word_counts = dict(Counter(words_list))
 
     # Get the top 10 and bottom 10 most frequent words
-    top10 = dict(sorted(word_counts.items(), key=lambda x: x[1], reverse=True)[:10])
+    top10 = dict(sorted(word_counts.items(), key=lambda x: x[1], reverse=True)[:10][::-1])
     bottom10 = dict(sorted(word_counts.items(), key=lambda x: x[1])[:10])
 
     # Create the plotly subplots
-    fig = make_subplots(rows=1, cols=2, subplot_titles=('Top 10 Words', 'Bottom 10 Words'))
+    fig = make_subplots(rows=1, cols=2, subplot_titles=('Top 10 Words', 'Least occurring 10 Words'), horizontal_spacing=0.3)
 
     # Add bar traces for top 10 words subplot
-    fig.add_trace(go.Bar(x=list(top10.keys()), y=list(top10.values()), name='Most frequent words'), row=1, col=1)
+    fig.add_trace(go.Bar(x=list(top10.values()), y=list(top10.keys()), name='Most frequent words', orientation='h'), row=1, col=1)
 
     # Add bar traces for bottom 10 words subplot
-    fig.add_trace(go.Bar(x=list(bottom10.keys()), y=list(bottom10.values()), name='Least frequent words'), row=1, col=2)
+    fig.add_trace(go.Bar(x=list(bottom10.values()), y=list(bottom10.keys()), name='Least frequent words', orientation='h'), row=1, col=2)
 
     # Update layout of the figure
-    fig.update_layout(title='Top and bottom 10 words', barmode='group')
+    fig.update_layout(title='Top and least 10 words', barmode='group')
 
     return fig

@@ -76,7 +76,7 @@ if data is not None:
     generate_wordcloud(text)  # Set max_words to a fixed value of 100
 
     # Show top and bottom 10 words
-    st.subheader("Top and bottom 10 words")
+    st.subheader("Top and least 10 words")
     fig = get_max_min_words(cleandf, 'cleaned')
     st.plotly_chart(fig)
 else:
