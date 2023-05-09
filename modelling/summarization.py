@@ -9,6 +9,7 @@ import re
 def summarize_dataframe(df, column_name, num_sentences):
     # clean the None values first
     df = df.dropna(subset=[column_name])
+    df.drop_duplicates(subset=['content'], inplace=True)
 
     # Initialize a TextRankSummarizer object
     summarizer = TextRankSummarizer()

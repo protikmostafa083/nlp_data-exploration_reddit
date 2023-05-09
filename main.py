@@ -122,7 +122,7 @@ if data is not None:
     elif modelling == 'NER':
         get_ner(cleandf, 'cleaned')
     elif modelling == 'NGrams':
-        get_ngrams(cleandf, 'cleaned')
+        get_ngrams(cleandf, 'cleaned', data)
     elif modelling == 'Summarization':
         summarize_dataframe(data,'content', 1)
     elif modelling == 'Sentiment Analysis':

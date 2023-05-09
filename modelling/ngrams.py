@@ -3,6 +3,7 @@ import pandas as pd
 from nltk.collocations import BigramAssocMeasures, BigramCollocationFinder
 from nltk.collocations import TrigramAssocMeasures, TrigramCollocationFinder
 from modelling.concordance import get_concordance
+from modelling.summarization import summarize_dataframe
 
 
 w_bigram = 'Bi-gram'
@@ -45,7 +46,7 @@ def get_top_trigrams(text, n=10):
     return top_trigrams
 
 
-def get_ngrams(df, column):
+def get_ngrams(df, column, data):
     # Display visualization using Streamlit
     st.header('N-grams Model')
     st.subheader('To measure of the strength of association between words in a text document.')
@@ -69,12 +70,20 @@ def get_ngrams(df, column):
         words = sorted(list(set([word for bi_gram in bigrams[w_bigram] for word in bi_gram])))
         selected_word = st.selectbox('Select a word', words)
 
-        # Call Concordance with selected word
-        #Concordance.main(cleandf, str(selected_word))
-        #num_words = st.slider('Number of words', 1, 200, 30)
-        result = get_concordance(df, column, selected_word, num_words=40)
-        for line in result:
-            st.markdown(line, unsafe_allow_html=True)
+        # Call Concordance or summarization with selected word
+        selected_option = st.selectbox('Select an option', ['Concordance', 'Summarization'])
+
+        if selected_option == 'Concordance':
+            # Call Concordance with selected word
+            result = get_concordance(df, column, selected_word, num_words=40)
+            for line in result:
+                st.markdown(line, unsafe_allow_html=True)
+        else:
+            # Search all over the content column of the dataframe for the selected word
+            df_selected_word = data[data['content'].str.contains(selected_word, na=False)]
+
+            # Summarize the selected_word data
+            summarize_dataframe(df_selected_word, 'content', 1)
     else:
         # Get the top N tri-grams
         trigram_n = st.number_input('Select top N ' + w_trigram, min_value=5, max_value=50, value=5, step=5)
@@ -86,7 +95,17 @@ def get_ngrams(df, column):
         selected_word = st.selectbox('Select a word', words)
 
         # Call Concordance with selected word
-        #num_words = st.slider('Number of words', 1, 200, 30)
-        result = get_concordance(df, column, selected_word, num_words=40)
-        for line in result:
-            st.markdown(line, unsafe_allow_html=True)
+        # Call Concordance or summarization with selected word
+        selected_option = st.selectbox('Select an option', ['Concordance', 'Summarization'])
+
+        if selected_option == 'Concordance':
+            # Call Concordance with selected word
+            result = get_concordance(df, column, selected_word, num_words=40)
+            for line in result:
+                st.markdown(line, unsafe_allow_html=True)
+        else:
+            # Search all over the content column of the dataframe for the selected word
+            df_selected_word = data[data['content'].str.contains(selected_word, na=False)]
+
+            # Summarize the selected_word data
+            summarize_dataframe(df_selected_word, 'content', 1)
