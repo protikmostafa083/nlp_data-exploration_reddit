@@ -13,6 +13,7 @@ from modelling.concordance import get_concordance
 from modelling.lda import get_lda
 from modelling.ner import get_ner
 from modelling.ngrams import get_ngrams
+from modelling.summarization import summarize_dataframe
 
 
 
@@ -33,7 +34,7 @@ if uploaded_file is not None:
 else:
     data = None
     # Show search options if file is not uploaded
-    if st.experimental_get_query_params().get("file_uploaded") != "true":                                               # Protik changed this
+    if st.experimental_get_query_params().get("file_uploaded") != "true":
         st.warning("Please upload a CSV file or run a new search.")
         search_query = st.text_input('Enter your search query:')
         time_filters = ['all', 'day', 'hour', 'month', 'week', 'year']
@@ -93,7 +94,7 @@ if data is not None:
     st.plotly_chart(fig)
 
     # show the other modelling
-    modelling = st.selectbox('Select model', ['Concordance', 'LDA', 'NER', 'NGrams'])
+    modelling = st.selectbox('Select model', ['Concordance', 'LDA', 'NER', 'NGrams', 'Summarization'])
     if modelling == 'Concordance':
         st.header('Concordance')
         st.subheader('To show the context surrounding a particular word in a post.')
@@ -121,6 +122,8 @@ if data is not None:
         get_ner(cleandf, 'cleaned')
     elif modelling == 'NGrams':
         get_ngrams(cleandf, 'cleaned')
+    elif modelling == 'Summarization':
+        summarize_dataframe(data,'content', 1)
 
 
 else:
