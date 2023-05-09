@@ -14,6 +14,7 @@ from modelling.lda import get_lda
 from modelling.ner import get_ner
 from modelling.ngrams import get_ngrams
 from modelling.summarization import summarize_dataframe
+from modelling.sentiment_analysis import plot_sentiment_analysis
 
 
 
@@ -94,7 +95,7 @@ if data is not None:
     st.plotly_chart(fig)
 
     # show the other modelling
-    modelling = st.selectbox('Select model', ['Concordance', 'LDA', 'NER', 'NGrams', 'Summarization'])
+    modelling = st.selectbox('Select model', ['Concordance', 'LDA', 'NER', 'NGrams', 'Summarization', "Sentiment Analysis"])
     if modelling == 'Concordance':
         st.header('Concordance')
         st.subheader('To show the context surrounding a particular word in a post.')
@@ -124,6 +125,9 @@ if data is not None:
         get_ngrams(cleandf, 'cleaned')
     elif modelling == 'Summarization':
         summarize_dataframe(data,'content', 1)
+    elif modelling == 'Sentiment Analysis':
+        plot_sentiment_analysis(cleandf, 'cleaned')
+
 
 
 else:

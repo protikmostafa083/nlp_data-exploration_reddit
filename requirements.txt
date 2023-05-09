@@ -8,3 +8,4 @@ spacy
 gensim
 pyLDAvis
 sumy
+textblob
