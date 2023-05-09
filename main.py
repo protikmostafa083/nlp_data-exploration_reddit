@@ -8,9 +8,15 @@ from EDA.cleanpreviousfiles import cleanpreviousfiles
 from modelling.wordcloud import generate_wordcloud
 from modelling.maxminwords import get_max_min_words
 from EDA.customstopword import remove_custom_stopwords
+# from modelling import Concordance, LDA, NER, NGrams
+from modelling.concordance import get_concordance
+from modelling.lda import get_lda
+from modelling.ner import get_ner
+from modelling.ngrams import get_ngrams
 
 
-st.set_page_config("Reddit Data Exploration", "🤖")
+
+st.set_page_config("Reddit Data Exploration", "🤖", layout='wide')
 st.title('Reddit Search')
 
 # clean the previous files from the file system
@@ -85,5 +91,37 @@ if data is not None:
     st.subheader("Top and least 10 words")
     fig = get_max_min_words(cleandf, 'cleaned')
     st.plotly_chart(fig)
+
+    # show the other modelling
+    modelling = st.selectbox('Select model', ['Concordance', 'LDA', 'NER', 'NGrams'])
+    if modelling == 'Concordance':
+        st.header('Concordance')
+        st.subheader('To show the context surrounding a particular word in a post.')
+
+        # Explanation of visualization features
+        st.write('1. Enter a single keyword.')
+        st.write(
+            '2. The result allows you to see all the instances of the word in all the posts, along with the words immediately preceding and following it.')
+        st.write(
+            '3. By examining the context in which a word appears, it may be possible to **determine its intended/broader meaning of the word** in the post.')
+
+        # Add a text input box for the user to enter the input word
+        input_word = st.text_input("Enter a word for concordance:")
+        if input_word:
+            st.write(f"Concordance associated with '{input_word}':")
+            #num_words = st.slider('Number of words', 1, 200, 30)
+            result = get_concordance(cleandf, "cleaned", input_word, num_words=40)
+            for line in result:
+                st.markdown(line, unsafe_allow_html=True)
+        else:
+            st.write("Please enter a word for concordance.")
+    elif modelling == 'LDA':
+        get_lda(cleandf, 'cleaned')
+    elif modelling == 'NER':
+        get_ner(cleandf, 'cleaned')
+    elif modelling == 'NGrams':
+        get_ngrams(cleandf, 'cleaned')
+
+
 else:
     st.write("Nothing to show now. Search or upload file first")
