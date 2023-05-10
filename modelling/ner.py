@@ -58,8 +58,18 @@ def get_ner(df, column, dataframe):
             st.write(remapped_label, list(set(entities)))
 
     # get the raw and summarized data from here
-    selected_word2 = st.text_input("Enter a word to get the raw data and summarization:")
-    df_selected_ner = dataframe[dataframe['content'].str.contains(selected_word2, na=False)]
-    # Summarize the selected_word data
-    summarize_dataframe(df_selected_ner, 'content', 1)
+    selected_word_ner = st.text_input("Enter a word to get the raw data and summarization:")
+    if selected_word_ner == '':
+        st.write("First put a word to see the original and summary data")
+    else:
+        joined_df = dataframe.merge(df, on='id', how='left')
+        df_selected_ner = joined_df[joined_df['cleaned'].str.contains(selected_word_ner, na=False)]
+        df_selected_ner = df_selected_ner.rename(columns={'content_x': 'content'})
+        # st.write(df_selected_lda.columns)
+        if not df_selected_ner.empty:
+            # Summarize the selected_word data
+            summarize_dataframe(df_selected_ner, 'content', 1)
+        else:
+            st.write("No records found for the selected word.")
+        df_selected_ner = None
 
