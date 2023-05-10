@@ -28,6 +28,7 @@ cleanpreviousfiles()
 uploaded_file = st.file_uploader("Upload a CSV file", type="csv")
 if uploaded_file is not None:
     data = pd.read_csv(uploaded_file)
+    data = data.reset_index().rename(columns={'index': 'id'})  # Add index column and rename it to 'id'
     st.success("Data uploaded successfully!")
     st.dataframe(data[['content', 'date']], width=650)
     # Hide search options if file is uploaded
@@ -47,6 +48,7 @@ else:
             scraper.run(search_query, 'reddit_data.csv')
             # Load the saved data
             data = pd.read_csv('reddit_data.csv')
+            data = data.reset_index().rename(columns={'index': 'id'})  # Add index column and rename it to 'id'
             # Display the data in a table
             st.dataframe(data[['content', 'date']])
 
@@ -79,7 +81,7 @@ if data is not None:
     # Remove custom stop words
     custom_stop_words = st.text_input("Enter comma-separated words to remove from the text:")
     if custom_stop_words:
-        stop_words_list = [word.strip() for word in custom_stop_words.split(",")]
+        stop_words_list = [word.lower().strip() for word in custom_stop_words.split(",")]
         remove_custom_stopwords(cleandf, stop_words_list)
         st.success(f"Removed custom stop words: {stop_words_list}")
     # Generate and display the wordcloud
@@ -118,9 +120,9 @@ if data is not None:
         else:
             st.write("Please enter a word for concordance.")
     elif modelling == 'LDA':
-        get_lda(cleandf, 'cleaned')
+        get_lda(cleandf, 'cleaned', data)
     elif modelling == 'NER':
-        get_ner(cleandf, 'cleaned')
+        get_ner(cleandf, 'cleaned', data)
     elif modelling == 'NGrams':
         get_ngrams(cleandf, 'cleaned', data)
     elif modelling == 'Summarization':

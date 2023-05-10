@@ -2,11 +2,12 @@ import streamlit as st
 import gensim
 import pyLDAvis
 import pyLDAvis.gensim_models as gensimvis
+from modelling.summarization import summarize_dataframe
 
 cleaned_col = 'cleaned'
 
 
-def get_lda(df, column):
+def get_lda(df, column, dataframe):
     # Extract the 'content' column as a list of sentences
     data = [str(sent).split() for sent in df[column].tolist()]
 
@@ -44,3 +45,18 @@ def get_lda(df, column):
     vis_data = gensimvis.prepare(lda_model, corpus, dictionary, R=10)
     html_string = pyLDAvis.prepared_data_to_html(vis_data)
     st.components.v1.html(html_string, width=1500, height=1000, scrolling=True)
+
+    selected_word_lda = st.text_input("Enter a word to get the raw data and summarization:")
+    if selected_word_lda == '':
+        st.write("First put a word to see the original and summary data")
+    else:
+        joined_df = dataframe.merge(df, on='id', how='left')
+        df_selected_lda = joined_df[joined_df[cleaned_col].str.contains(selected_word_lda, na=False)]
+        df_selected_lda = df_selected_lda.rename(columns={'content_x': 'content'})
+        # st.write(df_selected_lda.columns)
+        if not df_selected_lda.empty:
+            # Summarize the selected_word data
+            summarize_dataframe(df_selected_lda, 'content', 1)
+        else:
+            st.write("No records found for the selected word.")
+        df_selected_lda = None
