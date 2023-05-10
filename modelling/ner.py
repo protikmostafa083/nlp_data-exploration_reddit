@@ -23,8 +23,26 @@ def get_ner(df, column, dataframe):
         install_model('en_core_web_sm')
         nlp = spacy.load('en_core_web_sm')
 
+    nlp.max_length = 2000000
+
     # Process the text with spaCy
-    doc = nlp(df[column].str.cat(sep=' '))
+    text = ' '.join(df[column])
+    doc = nlp(text)
+
+    # Chunk the input text into smaller pieces
+    text_chunks = [df[column][i:i + 100000] for i in range(0, len(df[column]), 100000)]
+
+    # Process each chunk with spaCy
+    entities_by_label = {}
+    for chunk in text_chunks:
+        doc = nlp(' '.join(chunk))
+
+        # Group the entities by label
+        for ent in doc.ents:
+            label = ent.label_
+            if label not in entities_by_label:
+                entities_by_label[label] = []
+            entities_by_label[label].append(ent.text)
 
     # Map SpaCy label to plain English
     label_map = {
@@ -41,14 +59,6 @@ def get_ner(df, column, dataframe):
         'LANGUAGE': 'Language',
         'MONEY': 'Money'
     }
-
-    # Group the entities by label
-    entities_by_label = {}
-    for ent in doc.ents:
-        label = ent.label_
-        if label not in entities_by_label:
-            entities_by_label[label] = []
-        entities_by_label[label].append(ent.text)
 
     # Print the entities grouped by label with remapped labels
     for label, entities in entities_by_label.items():
@@ -72,4 +82,3 @@ def get_ner(df, column, dataframe):
         else:
             st.write("No records found for the selected word.")
         df_selected_ner = None
-

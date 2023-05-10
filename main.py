@@ -8,7 +8,6 @@ from EDA.cleanpreviousfiles import cleanpreviousfiles
 from modelling.wordcloud import generate_wordcloud
 from modelling.maxminwords import get_max_min_words
 from EDA.customstopword import remove_custom_stopwords
-# from modelling import Concordance, LDA, NER, NGrams
 from modelling.concordance import get_concordance
 from modelling.lda import get_lda
 from modelling.ner import get_ner
@@ -19,18 +18,25 @@ from modelling.sentiment_analysis import plot_sentiment_analysis
 
 
 st.set_page_config("Reddit Data Exploration", "🤖", layout='wide')
-st.title('Reddit Search')
+st.title('Reddit Search and Data Exploration')
+st.write("")
 
 # clean the previous files from the file system
 cleanpreviousfiles()
 
 # Option to upload previous data
-uploaded_file = st.file_uploader("Upload a CSV file", type="csv")
+#uploaded_file = st.file_uploader("Upload a CSV file", type="csv")
+st.subheader("**Upload a CSV file (Previously collected data)**")
+uploaded_file = st.file_uploader("", type="csv")
 if uploaded_file is not None:
     data = pd.read_csv(uploaded_file)
     data = data.reset_index().rename(columns={'index': 'id'})  # Add index column and rename it to 'id'
     st.success("Data uploaded successfully!")
-    st.dataframe(data[['content', 'date']], width=650)
+    st.markdown("""
+                            **Raw Data:**  
+                            *The Raw Data section displays the unprocessed, original data obtained from the Reddit search or uploaded CSV file. It provides a glimpse of the data in its raw form without any modifications or cleaning.*
+                        """)
+    st.dataframe(data[['content', 'date']], width=1000)
     # Hide search options if file is uploaded
     st.experimental_set_query_params(file_uploaded="true")
 else:
@@ -38,19 +44,48 @@ else:
     # Show search options if file is not uploaded
     if st.experimental_get_query_params().get("file_uploaded") != "true":
         st.warning("Please upload a CSV file or run a new search.")
-        search_query = st.text_input('Enter your search query:')
-        time_filters = ['all', 'day', 'hour', 'month', 'week', 'year']
+        st.subheader("Or enter your search query:")
+        time_filters = ['all', 'hour', 'day', 'week', 'month', 'year']
+        st.markdown("""
+            **Time filters**  
+            Specify a time filter to narrow down the search results based on the time of the Reddit posts. By default, the search includes posts from all time periods.
+
+            - **all**: collects data randomly.  
+            - **hour**: collects data of last 1 hour.  
+            - **day**: collects data of last 1 day.  
+            - **week**: collects data of last 1 week.  
+            - **year**: collects data of last 1 year.  
+        """)
+
         time_filter = st.selectbox('Choose a time filter:', time_filters, index=0)
         sort_methods = ['relevance', 'hot', 'top', 'new', 'comments']
+        st.markdown("""
+                    **Sort methods:**  
+                    Select a sorting method to organize the search results. The default sorting method is relevance, which prioritizes posts that are most relevant to your search query.
+
+                    - **relevance** : sorts posts based on their relevance to the search query.  
+                    - **hot**: sorts posts based on popularity and recent activity.
+                    - **top**: sorts posts based on the highest upvotes and engagement.
+                    - **new**: sorts posts based on their submission time, displaying the most recent ones first.  
+                    - **comments**: sorts posts based on the number of comments they have received.
+                """)
         sort_method = st.selectbox('Choose a sort method:', sort_methods, index=0)
+        search_query = st.text_input(
+            'Enter the keywords or phrases you want to search and press ENTER. (Example: safety OR scaffold OR \"scaffold safety\" work)"',
+            value='')
         if search_query != '' and time_filter != '' and sort_method != '':
+            cleanpreviousfiles()
             scraper = RedditScraper(time_filter=time_filter, sort_method=sort_method)
             scraper.run(search_query, 'reddit_data.csv')
             # Load the saved data
             data = pd.read_csv('reddit_data.csv')
             data = data.reset_index().rename(columns={'index': 'id'})  # Add index column and rename it to 'id'
             # Display the data in a table
-            st.dataframe(data[['content', 'date']])
+            st.markdown("""
+                        **Raw Data:**  
+                        *The Raw Data section displays the unprocessed, original data obtained from the Reddit search or uploaded CSV file. It provides a glimpse of the data in its raw form without any modifications or cleaning.*
+                    """)
+            st.dataframe(data[['content', 'date']], width=1000)
 
             # add the download functionality
             if len(data) > 0:
@@ -62,13 +97,15 @@ else:
 
 if data is not None:
     # call the cleaning function
-    #filename = cleandata(data)
-    #cleandf = pd.read_csv(filename)
+
     cleandf = cleandata(data)
 
     # Display the cleaned data in a table
-    st.write("Cleaned Data:")
-    st.dataframe(cleandf[['cleaned', 'date']], width=650)
+    st.markdown("""
+                            **Clean Data:**  
+                            *In the Cleaned Data section, you can find the processed and refined version of the data. It has undergone cleaning techniques to remove irrelevant or erroneous information, making it easier to analyze and interpret.*
+                        """)
+    st.dataframe(cleandf[['cleaned', 'date']], width=1000)
 
     # add the download functionality
     if len(cleandf) > 0:
@@ -80,6 +117,10 @@ if data is not None:
 
     # Remove custom stop words
     custom_stop_words = st.text_input("Enter comma-separated words to remove from the text:")
+    st.markdown("""
+                                **Custom stopword:**  
+                                *If there are specific words you don't want to include in the word cloud or any other analysis, you can enter them in the Custom Stopwords section. This allows you to customize the output by excluding those particular words.*
+                            """)
     if custom_stop_words:
         stop_words_list = [word.lower().strip() for word in custom_stop_words.split(",")]
         remove_custom_stopwords(cleandf, stop_words_list)
