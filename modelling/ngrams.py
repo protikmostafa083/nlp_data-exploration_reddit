@@ -79,11 +79,10 @@ def get_ngrams(df, column, data):
             for line in result:
                 st.markdown(line, unsafe_allow_html=True)
         else:
-            # Search all over the content column of the dataframe for the selected word
-            df_selected_word = data[data['content'].str.contains(selected_word, na=False)]
-
-            # Summarize the selected_word data
-            summarize_dataframe(df_selected_word, 'content', 1)
+            joined_df = data.merge(df, on='id', how='left')
+            df_selected_ngrams = joined_df[joined_df['cleaned'].str.contains(selected_word, na=False)]
+            df_selected_ngrams = df_selected_ngrams.rename(columns={'content_x': 'content'})
+            summarize_dataframe(df_selected_ngrams, 'content', 1)
     else:
         # Get the top N tri-grams
         trigram_n = st.number_input('Select top N ' + w_trigram, min_value=5, max_value=50, value=5, step=5)
@@ -104,8 +103,7 @@ def get_ngrams(df, column, data):
             for line in result:
                 st.markdown(line, unsafe_allow_html=True)
         else:
-            # Search all over the content column of the dataframe for the selected word
-            df_selected_word = data[data['content'].str.contains(selected_word, na=False)]
-
-            # Summarize the selected_word data
-            summarize_dataframe(df_selected_word, 'content', 1)
+            joined_df = data.merge(df, on='id', how='left')
+            df_selected_ngrams = joined_df[joined_df['cleaned'].str.contains(selected_word, na=False)]
+            df_selected_ngrams = df_selected_ngrams.rename(columns={'content_x': 'content'})
+            summarize_dataframe(df_selected_ngrams, 'content', 1)
