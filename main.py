@@ -116,11 +116,11 @@ if data is not None:
         st.markdown(href, unsafe_allow_html=True)
 
     # Remove custom stop words
+    st.subheader("Custom Stopwords")
+    st.markdown(""" 
+                    *If there are specific words you don't want to include in the word cloud or any other analysis, you can enter them in the Custom Stopwords section. This allows you to customize the output by excluding those particular words.*
+                    """)
     custom_stop_words = st.text_input("Enter comma-separated words to remove from the text:")
-    st.markdown("""
-                                **Custom stopword:**  
-                                *If there are specific words you don't want to include in the word cloud or any other analysis, you can enter them in the Custom Stopwords section. This allows you to customize the output by excluding those particular words.*
-                            """)
     if custom_stop_words:
         stop_words_list = [word.lower().strip() for word in custom_stop_words.split(",")]
         remove_custom_stopwords(cleandf, stop_words_list)
@@ -128,17 +128,27 @@ if data is not None:
     # Generate and display the wordcloud
     # Generate and display the wordcloud
     st.subheader("Wordcloud")
+    st.markdown("""  
+                    *The Word Cloud feature generates a visual representation of the most frequently occurring words in the dataset. You can adjust the slider to control the number of words displayed in the cloud, allowing you to focus on the most relevant or significant terms.*
+                    """)
     text = ' '.join(cleandf['cleaned'].astype(str).tolist())
     max_words = st.slider("Max Words", 50, 300, 100)
     generate_wordcloud(text, max_words)
 
     # Show top and bottom 10 words
-    st.subheader("Top and least 10 words")
+    st.subheader("Top and Rare 10 words")
+    st.markdown("""  
+                *The section highlights the top and least frequently occurring 10 words in the dataset. It provides insights into unique or uncommon terms that may require special attention during analysis*
+                """)
     fig = get_max_min_words(cleandf, 'cleaned')
     st.plotly_chart(fig)
 
     # show the other modelling
-    modelling = st.selectbox('Select model', ['Concordance', 'LDA', 'NER', 'NGrams', 'Summarization', "Sentiment Analysis"])
+    st.subheader("Analysis")
+    st.markdown("""  
+                *In this section, you have six options to choose from: Concordance, LDA (Latent Dirichlet Allocation) Topic Modelling, NER (Named Entity Recognition), NGrams, Summarization and Sentiment Analysis.*
+                """)
+    modelling = st.selectbox('Choose an analysis type', ['Concordance', 'Summarization', 'NGrams', "Sentiment Analysis", 'NER', 'LDA'])
     if modelling == 'Concordance':
         st.header('Concordance')
         st.subheader('To show the context surrounding a particular word in a post.')
