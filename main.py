@@ -148,7 +148,7 @@ if data is not None:
     st.markdown("""  
                 *In this section, you have six options to choose from: Concordance, LDA (Latent Dirichlet Allocation) Topic Modelling, NER (Named Entity Recognition), NGrams, Summarization and Sentiment Analysis.*
                 """)
-    modelling = st.selectbox('Choose an analysis type', ['Concordance', 'Summarization', 'NGrams', "Sentiment Analysis", 'NER', 'LDA'])
+    modelling = st.selectbox('Choose an analysis type', ['Concordance', 'Summarization', 'NGrams', 'NER', 'LDA'])#"Sentiment Analysis", 'NER', 'LDA'])
     if modelling == 'Concordance':
         st.header('Concordance')
         st.subheader('To show the context surrounding a particular word in a post.')
@@ -178,8 +178,8 @@ if data is not None:
         get_ngrams(cleandf, 'cleaned', data)
     elif modelling == 'Summarization':
         summarize_dataframe(data,'content', 1)
-    elif modelling == 'Sentiment Analysis':
-        plot_sentiment_analysis(cleandf, 'cleaned')
+    #elif modelling == 'Sentiment Analysis':
+        #plot_sentiment_analysis(cleandf, 'cleaned')
 
 
 
