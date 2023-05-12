@@ -1,7 +1,10 @@
+# Import required libraries
 import streamlit as st
 import pandas as pd
 import base64
 import os
+
+# Import user-defined modules
 from DataCollection.praw_reddit_data_collector import RedditScraper
 from EDA.dataClean import cleandata
 from EDA.cleanpreviousfiles import cleanpreviousfiles
@@ -15,14 +18,20 @@ from modelling.ngrams import get_ngrams
 from modelling.summarization import summarize_dataframe
 from modelling.sentiment_analysis import plot_sentiment_analysis
 
-
-
+# Set the title and favicon of the Streamlit app
 st.set_page_config("Reddit Data Exploration", "🤖", layout='wide')
+
+# Add a title to the app
 st.title('Reddit Search and Data Exploration')
+
+# Add a space
 st.write("")
 
-# clean the previous files from the file system
+# Clean the previous files from the file system
 cleanpreviousfiles()
+
+# The above function is user-defined and it cleans the files that were created during the last run of the app.
+# This is done so that the new files created during the current run do not get mixed up with the old ones.
 
 # Option to upload previous data
 #uploaded_file = st.file_uploader("Upload a CSV file", type="csv")
@@ -54,6 +63,7 @@ else:
             - **hour**: collects data of last 1 hour.  
             - **day**: collects data of last 1 day.  
             - **week**: collects data of last 1 week.  
+            - **month**: collects data of last 1 month.
             - **year**: collects data of last 1 year.  
         """)
 
@@ -120,7 +130,7 @@ if data is not None:
     st.markdown(""" 
                     *If there are specific words you don't want to include in the word cloud or any other analysis, you can enter them in the Custom Stopwords section. This allows you to customize the output by excluding those particular words.*
                     """)
-    custom_stop_words = st.text_input("Enter comma-separated words to remove from the text:")
+    custom_stop_words = st.text_input("Enter comma-separated words to remove from the text and press ENTER:")
     if custom_stop_words:
         stop_words_list = [word.lower().strip() for word in custom_stop_words.split(",")]
         remove_custom_stopwords(cleandf, stop_words_list)
@@ -144,11 +154,15 @@ if data is not None:
     st.plotly_chart(fig)
 
     # show the other modelling
-    st.subheader("Analysis")
-    st.markdown("""  
-                *In this section, you have six options to choose from: Concordance, LDA (Latent Dirichlet Allocation) Topic Modelling, NER (Named Entity Recognition), NGrams, Summarization and Sentiment Analysis.*
+    st.subheader("Advanced Analysis")
+    st.markdown("""
+                *In this section, you have five options to choose from: Concordance, Summarization, NGrams, NER (Named Entity Recognition), and Topic Modelling.*
                 """)
-    modelling = st.selectbox('Choose an analysis type', ['Concordance', 'Summarization', 'NGrams', 'NER', 'LDA'])#"Sentiment Analysis", 'NER', 'LDA'])
+
+    #-----------------------
+    #-------------  # Sentiment Analysis is gapped
+    #--------------
+    modelling = st.selectbox('Choose an analysis type', ['Concordance', 'Summarization', 'NGrams', 'Topic modelling', 'NER'])#"Sentiment Analysis", 'NER', 'LDA'])
     if modelling == 'Concordance':
         st.header('Concordance')
         st.subheader('To show the context surrounding a particular word in a post.')
@@ -170,7 +184,7 @@ if data is not None:
                 st.markdown(line, unsafe_allow_html=True)
         else:
             st.write("Please enter a word for concordance.")
-    elif modelling == 'LDA':
+    elif modelling == 'Topic modelling':
         get_lda(cleandf, 'cleaned', data)
     elif modelling == 'NER':
         get_ner(cleandf, 'cleaned', data)

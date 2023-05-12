@@ -37,8 +37,8 @@ def get_lda(df, column, dataframe):
     # Build LDA model
     # Add a slider for the number of topics
     num_topics = 0
-    num_topics = st.slider('Select the number of topics:', min_value=2, max_value=10, value=4)
-    lda_model = gensim.models.ldamodel.LdaModel(corpus=corpus, num_topics=num_topics, id2word=dictionary)
+    num_topics = st.slider('Select the number of topics:', min_value=2, max_value=10, value=3)
+    lda_model = gensim.models.ldamodel.LdaModel(corpus=corpus, num_topics=num_topics, id2word=dictionary, alpha='symmetric', eta='symmetric', iterations=100)
 
 
     # Visualize topics
