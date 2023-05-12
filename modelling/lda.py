@@ -3,6 +3,7 @@ import gensim
 import pyLDAvis
 import pyLDAvis.gensim_models as gensimvis
 from modelling.summarization import summarize_dataframe
+from modelling.lda_tuning import get_best_model
 
 cleaned_col = 'cleaned'
 
@@ -35,10 +36,17 @@ def get_lda(df, column, dataframe):
         '6. By contrast, setting λ = 0 words sorts words whose red bars are nearly as long as their blue bars will be sorted at the top.')
 
     # Build LDA model
-    # Add a slider for the number of topics
-    num_topics = 0
-    num_topics = st.slider('Select the number of topics:', min_value=2, max_value=10, value=3)
-    lda_model = gensim.models.ldamodel.LdaModel(corpus=corpus, num_topics=num_topics, id2word=dictionary, alpha='symmetric', eta='symmetric', iterations=100)
+    # Support hyperparameter tuning
+    st.markdown(
+        'Select if derive the best model parameters automatically or manually to the analysis. Note that auto takes time!')
+    is_auto = st.radio('Select an option:', ('Manual', 'Auto'))
+    if is_auto == 'Auto':
+        lda_model = get_best_model(df)
+    else:
+        # Add a slider for the number of topics
+        num_topics = st.slider('Select the number of topics:', min_value=2, max_value=10, value=3)
+        lda_model = gensim.models.ldamodel.LdaModel(corpus=corpus, num_topics=num_topics, id2word=dictionary,
+                                                    alpha='symmetric', eta='symmetric', iterations=100)
 
 
     # Visualize topics
