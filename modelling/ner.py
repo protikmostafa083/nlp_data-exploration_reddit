@@ -11,11 +11,11 @@ def install_model(model):
 
 def load_model():
     try:
-        nlp = spacy.load('en')
+        nlp = spacy.load('en-core-web-sm')
     except OSError:
         st.write('Downloading language model... this may take a while')
         install_model('en_core_web_sm')
-        nlp = spacy.load('en')
+        nlp = spacy.load('en-core-web-sm')
     return nlp
 
 def get_ner(df, column, dataframe):
