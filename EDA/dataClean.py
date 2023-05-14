@@ -4,6 +4,10 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
+#download all resources from nltk
+nltk.download('all')
+#nltk.download('wordnet')
+#nltk.download('stopwords')
 
 # write the function of this python file and define all functionalities
 def cleandata(data):
@@ -45,9 +49,6 @@ def cleandata(data):
     df['cleaned_without_stopwords'] = df['content_tokens'].apply(lemmatize)
 
     # built-in stopword removal
-    nltk.download('punkt')
-    nltk.download('wordnet')
-    nltk.download('stopwords')
     stop_words = set(stopwords.words('english'))  # Set of stopwords
 
     # function to remove stopwords from the text
