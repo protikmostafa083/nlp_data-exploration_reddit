@@ -7,7 +7,7 @@ from modelling.summarization import summarize_dataframe
 
 
 def install_model(model):
-    subprocess.run(['python', '-m', 'spacy', 'download', 'en'])
+    subprocess.run(['python', '-m', 'spacy', 'download', 'en_core_web_lg'])
 
 def load_model():
     try:
