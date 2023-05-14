@@ -9,14 +9,24 @@ cleaned_col = 'cleaned'
 
 
 def get_lda(df, column, dataframe):
+    """
+    Perform Latent Dirichlet Allocation (LDA) topic modeling on the given DataFrame.
+
+    Parameters:
+    - df: DataFrame containing the text data to be modeled
+    - column: Name of the column in the DataFrame containing the text data
+    - dataframe: Original DataFrame containing additional columns
+
+    Returns:
+    None
+    """
+
     # Extract the 'content' column as a list of sentences
     data = [str(sent).split() for sent in df[column].tolist()]
 
     # Create dictionary and corpus
     dictionary = gensim.corpora.Dictionary(data)
     corpus = [dictionary.doc2bow(doc) for doc in data]
-
-
 
     # Display visualization using Streamlit
     st.header('Latent Dirichlet Allocation (LDA Topic Model)')
@@ -48,7 +58,6 @@ def get_lda(df, column, dataframe):
         lda_model = gensim.models.ldamodel.LdaModel(corpus=corpus, num_topics=num_topics, id2word=dictionary,
                                                     alpha='symmetric', eta='symmetric', iterations=100)
 
-
     # Visualize topics
     vis_data = gensimvis.prepare(lda_model, corpus, dictionary, R=10)
     html_string = pyLDAvis.prepared_data_to_html(vis_data)
@@ -58,10 +67,13 @@ def get_lda(df, column, dataframe):
     if selected_word_lda == '':
         st.write("First put a word to see the original and summary data")
     else:
+        # Join the original DataFrame with the LDA DataFrame based on the 'id' column
         joined_df = dataframe.merge(df, on='id', how='left')
+
+        # Filter the joined DataFrame to select rows where the cleaned text column contains the selected word
         df_selected_lda = joined_df[joined_df[cleaned_col].str.contains(selected_word_lda, na=False)]
         df_selected_lda = df_selected_lda.rename(columns={'content_x': 'content'})
-        # st.write(df_selected_lda.columns)
+
         if not df_selected_lda.empty:
             # Summarize the selected_word data
             summarize_dataframe(df_selected_lda, 'content', 1)

@@ -7,9 +7,17 @@ import re
 
 
 def summarize_dataframe(df, column_name, num_sentences=2):
-    # clean the None values first
+    """
+    Function to summarize the text in a dataframe column using the TextRank algorithm.
+    :param df: pandas.DataFrame, the dataframe containing the text column
+    :param column_name: str, the name of the text column to summarize
+    :param num_sentences: int, the number of sentences to include in the summary
+    """
+    # Clean the None values from the dataframe
     df = df.dropna(subset=[column_name])
-    df.drop_duplicates(subset=['content'], inplace=True)
+
+    # Remove duplicate values in the specified column
+    df.drop_duplicates(subset=[column_name], inplace=True)
 
     # Initialize a TextRankSummarizer object
     summarizer = TextRankSummarizer()
@@ -29,11 +37,10 @@ def summarize_dataframe(df, column_name, num_sentences=2):
 
         # Add the summarized version to the new column
         df.at[index, column_name + '_summarized'] = ' '.join(summarized_version)
+
+        # Remove special characters from the summarized text using regex
         pattern = r'[^a-zA-Z0-9\s]+'
         df.at[index, column_name + '_summarized'] = re.sub(pattern, '', ' '.join(summarized_version)).strip()
-
-
-
 
     # Display the original and summarized data
     st.header('Original and Summarized Data')

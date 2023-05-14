@@ -4,23 +4,32 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
-#download all resources from nltk
+# Download all resources from NLTK
 nltk.download('all')
-#nltk.download('wordnet')
-#nltk.download('stopwords')
+# nltk.download('wordnet')
+# nltk.download('stopwords')
 
-# write the function of this python file and define all functionalities
 def cleandata(data):
-    # Read the CSV file into a Pandas dataframe
+    """
+    Clean the data by performing various preprocessing steps.
+
+    Parameters:
+    - data: Pandas DataFrame containing the data to be cleaned
+
+    Returns:
+    - df: Cleaned Pandas DataFrame
+    """
+
+    # Read the CSV file into a Pandas DataFrame
     df = data
 
     if df is None:
         return None
 
-    # removing None values
+    # Removing None values
     df = df.dropna(subset=['content'])
 
-    # removing duplicate values
+    # Removing duplicate values
     df.drop_duplicates(subset=['content'], inplace=True)
 
     # Converting into lower case
@@ -28,6 +37,15 @@ def cleandata(data):
 
     # Remove special characters
     def remove_special_characters(text):
+        """
+        Remove special characters from the text using regular expressions.
+
+        Parameters:
+        - text: Text to be processed
+
+        Returns:
+        - Cleaned text with special characters removed
+        """
         if isinstance(text, str):
             pattern = r'[^a-zA-Z\s]+'
             return re.sub(pattern, '', text)
@@ -43,16 +61,33 @@ def cleandata(data):
     lemmatizer = WordNetLemmatizer()
 
     def lemmatize(token_list):
+        """
+        Lemmatize the tokens in a token list.
+
+        Parameters:
+        - token_list: List of tokens to be lemmatized
+
+        Returns:
+        - String with lemmatized tokens joined by spaces
+        """
         tokens = [lemmatizer.lemmatize(token) for token in token_list]
         return " ".join(tokens)
 
     df['cleaned_without_stopwords'] = df['content_tokens'].apply(lemmatize)
 
-    # built-in stopword removal
+    # Built-in stopword removal
     stop_words = set(stopwords.words('english'))  # Set of stopwords
 
-    # function to remove stopwords from the text
     def remove_stopwords(text):
+        """
+        Remove stopwords from the text.
+
+        Parameters:
+        - text: Text to be processed
+
+        Returns:
+        - Text with stopwords removed
+        """
         if isinstance(text, str):
             # Remove URLs
             text = re.sub(r'http\S+|www\S+', '', text)
@@ -60,11 +95,12 @@ def cleandata(data):
             text = ' '.join([word for word in text.split() if word.lower() not in stop_words])
         return text
 
-    # apply the remove_stopwords function to the 'content' column
+    # Apply the remove_stopwords function to the 'cleaned_without_stopwords' column
     df['cleaned'] = df['cleaned_without_stopwords'].apply(lambda x: remove_stopwords(x))
 
-    # Export to a local csv file
+    # Export to a local CSV file
     cleaned_filename = 'cleaned.csv'
     df.to_csv(cleaned_filename, index=True)
 
     return df
+

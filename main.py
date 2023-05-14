@@ -137,7 +137,6 @@ if data is not None:
         remove_custom_stopwords(cleandf, stop_words_list)
         st.success(f"Removed custom stop words: {stop_words_list}")
     # Generate and display the wordcloud
-    # Generate and display the wordcloud
     st.subheader("Wordcloud")
     st.markdown("""  
                     *The Word Cloud feature generates a visual representation of the most frequently occurring words in the dataset. You can adjust the slider to control the number of words displayed in the cloud, allowing you to focus on the most relevant or significant terms.*
@@ -160,9 +159,6 @@ if data is not None:
                 *In this section, you have five options to choose from: Concordance, Summarization, NGrams, NER (Named Entity Recognition), and Topic Modelling.*
                 """)
 
-    #-----------------------
-    #-------------  # Sentiment Analysis is gapped
-    #--------------
     modelling = st.selectbox('Choose an analysis type', ['Concordance', 'Summarization', 'NGrams', 'Topic modelling', 'NER', "Sentiment Analysis"])#"Sentiment Analysis", 'NER', 'LDA'])
     if modelling == 'Concordance':
         st.header('Concordance')
@@ -195,8 +191,6 @@ if data is not None:
         summarize_dataframe(data,'content')
     elif modelling == 'Sentiment Analysis':
         plot_sentiment_analysis(cleandf, 'cleaned')
-
-
 
 else:
     st.write("Nothing to show now. Search or upload file first")

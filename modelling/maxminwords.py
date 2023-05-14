@@ -7,9 +7,13 @@ from plotly.subplots import make_subplots
 def get_max_min_words(df, col):
     """
     Function to get the top 10 and bottom 10 occurring words in a given column of a dataframe
-    :param df: pandas.DataFrame, the dataframe containing the text column
-    :param col: str, the name of the text column
-    :return: plotly.graph_objs.Figure, a figure object showing the 10 most and least frequent words side by side
+
+    Parameters:
+    - df: pandas.DataFrame, the dataframe containing the text column
+    - col: str, the name of the text column
+
+    Returns:
+    - plotly.graph_objs.Figure, a figure object showing the 10 most and least frequent words side by side
     """
     # Create a list of all words in the column
     words_list = df[col].str.split(expand=True).stack().tolist()
@@ -28,7 +32,8 @@ def get_max_min_words(df, col):
     fig.add_trace(go.Bar(x=list(top10.values()), y=list(top10.keys()), name='Top words', orientation='h'), row=1, col=1)
 
     # Add bar traces for bottom 10 words subplot
-    fig.add_trace(go.Bar(x=list(bottom10.values()), y=list(bottom10.keys()), name='Rare words', orientation='h'), row=1, col=2)
+    fig.add_trace(go.Bar(x=list(bottom10.values()), y=list(bottom10.keys()), name='Rare words', orientation='h'), row=1,
+                  col=2)
 
     # Update layout of the figure
     fig.update_layout(title='Top and Rare 10 words', barmode='group')

@@ -4,6 +4,13 @@ import spacy
 from modelling.summarization import summarize_dataframe
 
 def load_model():
+    """
+    Load the spaCy language model for Named Entity Recognition (NER).
+    If the model is not installed, download and install it.
+
+    Returns:
+    - nlp: Loaded spaCy language model
+    """
     try:
         nlp = spacy.load('en_core_web_sm')
     except OSError:
@@ -13,11 +20,23 @@ def load_model():
     return nlp
 
 def get_ner(df, column, dataframe):
+    """
+    Perform Named Entity Recognition (NER) on the text data in a given column of a DataFrame.
+
+    Parameters:
+    - df: DataFrame containing the text data
+    - column: Name of the column containing the text data
+    - dataframe: Original DataFrame used for joining and summarization
+
+    Returns:
+    None
+    """
     # Check if en_core_web_sm model is installed, and install it if not
     # Display visualization using Streamlit
     st.header('Named Entity Recognition')
     st.subheader('To identify important people, places, events, and other entities mentioned in the posts.')
 
+    # Load the spaCy language model
     nlp = load_model()
 
     nlp.max_length = 2000000
@@ -72,7 +91,6 @@ def get_ner(df, column, dataframe):
         joined_df = dataframe.merge(df, on='id', how='left')
         df_selected_ner = joined_df[joined_df['cleaned'].str.contains(selected_word_ner, na=False)]
         df_selected_ner = df_selected_ner.rename(columns={'content_x': 'content'})
-        # st.write(df_selected_lda.columns)
         if not df_selected_ner.empty:
             # Summarize the selected_word data
             summarize_dataframe(df_selected_ner, 'content', 1)
