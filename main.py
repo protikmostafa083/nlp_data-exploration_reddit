@@ -82,7 +82,7 @@ else:
                 """)
         sort_method = st.selectbox('Choose a sort method:', sort_methods, index=0)
         search_query = st.text_input(
-            'Enter the keywords or phrases you want to search and press ENTER. (Example: (burnout OR stress OR "mental anxietry") AND work))"',
+            'Enter the keywords or phrases you want to search and press ENTER. (Example: (burnout OR stress OR "mental anxiety") AND work))"',
             value='')
         if search_query != '' and time_filter != '' and sort_method != '':
             cleanpreviousfiles()
