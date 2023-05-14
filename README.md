@@ -5,6 +5,12 @@
 
 The Reddit Data Exploration project is a comprehensive analysis of burnout-related data collected from Reddit. The project aims to gain insights into the experiences, challenges, and sentiments shared by users within the Reddit community. By applying advanced Natural Language Processing (NLP) techniques, the project uncovers hidden patterns, identifies key themes, and provides a deeper understanding of burnout in various contexts.
 
+## Live Demo
+
+To explore the interactive live demo of the Reddit Data Exploration project, please visit the following link:
+
+[Reddit Data Exploration Live Demo](https://protikmostafa083-nlp-data-exploration-reddit-main-vf3w32.streamlit.app/)
+
 ## Key Features
 
 - **Data Collection:** Collect burnout-related data from Reddit using the powerful PRAW (Python Reddit API Wrapper) library.
@@ -66,4 +72,4 @@ Contributions to the project are welcome! If you find any issues or have suggest
 This project is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike [(CC BY-NC-SA)]((https://creativecommons.org/licenses/by-nc-sa/)) license
 
 ## Contact
-For any inquiries or further information, please feel free to reach out to me at mostafa.m.jalal@student.uts.edu.au. We'd love to hear from you!
+For any inquiries or further information, please feel free to reach out to me at mostafa.m.jalal@student.uts.edu.au. I'd love to hear from you!
