@@ -6,3 +6,4 @@ required_packages.egg-info/
 EDA/__pycache__/
 modelling/__pycache__/
 modelling/summarization2.py
+requirements2.txt
