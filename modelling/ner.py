@@ -7,7 +7,7 @@ from modelling.summarization import summarize_dataframe
 
 
 def install_model(model):
-    subprocess.run(['pip', 'install', 'https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz'])
+    subprocess.run(['python', '-m', 'spacy', 'download', 'en'])
 
 def load_model():
     try:
