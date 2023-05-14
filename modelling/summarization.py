@@ -6,7 +6,7 @@ import streamlit as st
 import re
 
 
-def summarize_dataframe(df, column_name, num_sentences):
+def summarize_dataframe(df, column_name, num_sentences=2):
     # clean the None values first
     df = df.dropna(subset=[column_name])
     df.drop_duplicates(subset=['content'], inplace=True)

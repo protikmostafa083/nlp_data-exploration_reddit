@@ -17,6 +17,7 @@ from modelling.ner import get_ner
 from modelling.ngrams import get_ngrams
 from modelling.summarization import summarize_dataframe
 from modelling.sentiment_analysis import plot_sentiment_analysis
+from modelling.summarization import summarize_dataframe
 
 # Set the title and favicon of the Streamlit app
 st.set_page_config("Reddit Data Exploration", "🤖", layout='wide')
@@ -179,7 +180,7 @@ if data is not None:
         if input_word:
             st.write(f"Concordance associated with '{input_word}':")
             #num_words = st.slider('Number of words', 1, 200, 30)
-            result = get_concordance(cleandf, "cleaned", input_word, num_words=40)
+            result = get_concordance(cleandf, "cleaned", input_word, num_words=100)
             for line in result:
                 st.markdown(line, unsafe_allow_html=True)
         else:
@@ -191,9 +192,9 @@ if data is not None:
     elif modelling == 'NGrams':
         get_ngrams(cleandf, 'cleaned', data)
     elif modelling == 'Summarization':
-        summarize_dataframe(data,'content', 1)
-    #elif modelling == 'Sentiment Analysis':
-        #plot_sentiment_analysis(cleandf, 'cleaned')
+        summarize_dataframe(data,'content')
+    elif modelling == 'Sentiment Analysis':
+        plot_sentiment_analysis(cleandf, 'cleaned')
 
 
 

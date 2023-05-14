@@ -1,7 +1,7 @@
 import streamlit as st
 from nltk.text import ConcordanceIndex
 
-def get_concordance(df, column, word, num_words=30):
+def get_concordance(df, column, word, num_words=100):
     """
     Get the concordance lines for a given word in a DataFrame column
     :param df: pandas.DataFrame, the DataFrame containing the column

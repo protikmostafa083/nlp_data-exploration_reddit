@@ -21,7 +21,7 @@ def generate_wordcloud(text, max_words):
         height=400,                    # Height of the wordcloud image
         background_color='black',      # Background color of the wordcloud image
         colormap='tab20c',             # Colormap used to color the wordcloud image
-        max_words=max_words                  # Maximum number of words to include in the wordcloud
+        max_words=max_words            # Maximum number of words to include in the wordcloud
     )
 
     # Generate wordcloud from the text

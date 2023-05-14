@@ -9,3 +9,4 @@ gensim
 pyLDAvis
 sumy
 textblob
+pandas
