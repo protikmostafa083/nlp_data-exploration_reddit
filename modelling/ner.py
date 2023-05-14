@@ -1,21 +1,15 @@
+import spacy.cli
 import streamlit as st
-import pandas as pd
 import spacy
-import argparse
-import subprocess
 from modelling.summarization import summarize_dataframe
-
-
-def install_model(model):
-    subprocess.run(['python', '-m', 'spacy', 'download', 'en_core_web_lg'])
 
 def load_model():
     try:
-        nlp = spacy.load("en_core_web_lg")
+        nlp = spacy.load('en_core_web_sm')
     except OSError:
         st.write('Downloading language model... this may take a while')
-        install_model('en_core_web_lg')
-        nlp = spacy.load("en_core_web_lg")
+        spacy.cli.download("en_core_web_sm")
+        nlp = spacy.load('en_core_web_sm')
     return nlp
 
 def get_ner(df, column, dataframe):
