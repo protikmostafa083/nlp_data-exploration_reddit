@@ -11,3 +11,4 @@ spacy
 streamlit==1.22.0
 sumy
 textblob
+wordcloud
