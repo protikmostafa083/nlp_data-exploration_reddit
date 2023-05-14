@@ -26,6 +26,8 @@ def generate_wordcloud(text, max_words):
 
     # Generate wordcloud from the text
     wc.generate(text)
+    #wordcloudres = wc.generate(text)
+    #print(dict(wordcloudres.words_))
 
     # Display the wordcloud
     fig, ax = plt.subplots(figsize=(10, 8))

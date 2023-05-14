@@ -9,6 +9,14 @@ from modelling.summarization import summarize_dataframe
 def install_model(model):
     subprocess.run(['python', '-m', 'spacy', 'download', model])
 
+def load_model():
+    try:
+        nlp = spacy.load('en_core_web_sm')
+    except OSError:
+        st.write('Downloading language model... this may take a while')
+        install_model('en_core_web_sm')
+        nlp = spacy.load('en_core_web_sm')
+    return nlp
 
 def get_ner(df, column, dataframe):
     # Check if en_core_web_sm model is installed, and install it if not
@@ -16,12 +24,7 @@ def get_ner(df, column, dataframe):
     st.header('Named Entity Recognition')
     st.subheader('To identify important people, places, events, and other entities mentioned in the posts.')
 
-    try:
-        nlp = spacy.load('en_core_web_sm')
-    except OSError:
-        st.write('Downloading language model... this may take a while')
-        install_model('en_core_web_sm')
-        nlp = spacy.load('en_core_web_sm')
+    nlp = load_model()
 
     nlp.max_length = 2000000
 
