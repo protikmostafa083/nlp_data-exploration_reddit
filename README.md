@@ -31,8 +31,6 @@ The Reddit Data Exploration project is a comprehensive analysis of burnout-relat
 
 - Pandas: A versatile data manipulation library for efficient data handling and analysis.
 
-- Scikit-learn: A comprehensive machine learning library used for sentiment analysis and other NLP tasks.
-
 - GitHub: A reliable version control platform for collaboration and project management.
 
 ## Installation and Usage
@@ -67,5 +65,5 @@ Contributions to the project are welcome! If you find any issues or have suggest
 ## License
 This project is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike [(CC BY-NC-SA)]((https://creativecommons.org/licenses/by-nc-sa/)) license
 
-##Contact
-For any inquiries or further information, please feel free to reach out to us at mostafa.m.jalal@student.uts.edu.au. We'd love to hear from you!
+## Contact
+For any inquiries or further information, please feel free to reach out to me at mostafa.m.jalal@student.uts.edu.au. We'd love to hear from you!
