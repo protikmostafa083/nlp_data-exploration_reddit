@@ -82,7 +82,7 @@ else:
                 """)
         sort_method = st.selectbox('Choose a sort method:', sort_methods, index=0)
         search_query = st.text_input(
-            'Enter the keywords or phrases you want to search and press ENTER. (Example: safety OR scaffold OR \"scaffold safety\" work)"',
+            'Enter the keywords or phrases you want to search and press ENTER. (Example: burnout OR stress OR \"mental anxietry\" AND work)"',
             value='')
         if search_query != '' and time_filter != '' and sort_method != '':
             cleanpreviousfiles()
@@ -163,7 +163,7 @@ if data is not None:
     #-----------------------
     #-------------  # Sentiment Analysis is gapped
     #--------------
-    modelling = st.selectbox('Choose an analysis type', ['Concordance', 'Summarization', 'NGrams', 'Topic modelling', 'NER'])#"Sentiment Analysis", 'NER', 'LDA'])
+    modelling = st.selectbox('Choose an analysis type', ['Concordance', 'Summarization', 'NGrams', 'Topic modelling', 'NER', "Sentiment Analysis"])#"Sentiment Analysis", 'NER', 'LDA'])
     if modelling == 'Concordance':
         st.header('Concordance')
         st.subheader('To show the context surrounding a particular word in a post.')
